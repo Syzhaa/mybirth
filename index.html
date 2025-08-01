@@ -295,7 +295,7 @@
         
         /* Responsif untuk tombol agar tidak terlalu besar di mobile */
         @media (max-width: 768px) {
-            .nav-btn, .gallery-nav-btn {
+            .nav-btn {
                 width: 40px;
                 height: 40px;
                 font-size: 20px;
@@ -303,12 +303,40 @@
             #nav-kiri { left: 10px; }
             #nav-kanan { right: 10px; }
             
-            #gallery-prev { left: 10px; } /* Posisi kembali ke tepi di mobile */
-            #gallery-next { right: 10px; }
-
             .pesan-pribadi h1 { font-size: 2rem; }
             .pesan-pribadi p { font-size: 1rem; }
             .galeri-container h2 { font-size: 1.8rem; margin-bottom: 40px;}
+
+            /* Sembunyikan tombol galeri di mobile */
+            .gallery-nav-btn {
+                display: none;
+            }
+
+            /* Ubah galeri menjadi slider geser */
+            .galeri-foto {
+                display: flex;
+                overflow-x: auto; /* Aktifkan scroll horizontal */
+                scroll-snap-type: x mandatory; /* Aktifkan snap scrolling */
+                -webkit-overflow-scrolling: touch; /* Scrolling mulus di iOS */
+                scrollbar-width: none; /* Sembunyikan scrollbar (Firefox) */
+                justify-content: flex-start;
+                align-items: center;
+                gap: 20px; /* Jarak antar kartu */
+                padding: 0 5%; /* Padding di sisi */
+                height: auto;
+            }
+            
+            .galeri-foto::-webkit-scrollbar {
+                display: none; /* Sembunyikan scrollbar (Chrome, Safari) */
+            }
+
+            .kartu-foto {
+                display: block; /* Pastikan semua kartu terlihat */
+                flex: 0 0 90%; /* Lebar kartu 90% dari container */
+                scroll-snap-align: center; /* Posisikan kartu di tengah saat snap */
+                max-width: none; /* Hapus max-width agar bisa lebih besar */
+                animation: none; /* Hapus animasi popIn karena tidak relevan lagi */
+            }
         }
     </style>
 </head>
@@ -487,7 +515,7 @@
                 halamanCountdown.style.display = 'none';
                 halamanUltah.style.display = 'block';
                 setupSlider();
-                setupGallerySlider();
+                setupDesktopGallery(); // Panggil fungsi setup galeri desktop
             }
             
             function formatWaktu(waktu) {
@@ -528,8 +556,11 @@
                 updateNavButtons();
             }
 
-            // --- LOGIKA GALERI (UNTUK SEMUA UKURAN LAYAR) ---
-            function setupGallerySlider() {
+            // --- LOGIKA GALERI (HANYA UNTUK DESKTOP) ---
+            function setupDesktopGallery() {
+                // Hanya jalankan jika bukan tampilan mobile
+                if (window.innerWidth <= 768) return;
+
                 const galleryPrevBtn = document.getElementById('gallery-prev');
                 const galleryNextBtn = document.getElementById('gallery-next');
                 const photoCards = document.querySelectorAll('.galeri-foto .kartu-foto');
