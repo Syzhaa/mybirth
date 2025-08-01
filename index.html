@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday to Me!</title>
+    <style>
+        /* CSS Ter-embed dengan Tema Hijau Maskulin & Layout Horizontal */
+        :root {
+            --bg-color: #f4f5f7;
+            --text-color: #343a40;
+            --primary-color: #588157;
+            --heading-color: #3A5A40;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --heading-font: 'Georgia', serif;
+            --body-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Mencegah scroll di body */
+        }
+
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Halaman Pilihan Awal */
+        #halaman-pilihan {
+            display: flex; /* Defaultnya tampil */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .pilihan-box {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .pilihan-box h1 {
+            font-family: var(--heading-font);
+            color: var(--heading-color);
+            margin-bottom: 15px;
+        }
+
+        .pilihan-box p {
+            margin-bottom: 25px;
+        }
+
+        .input-grup {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #input-tanggal-lahir {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: var(--body-font);
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        #btn-set-tanggal, #btn-coba-demo {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #btn-set-tanggal:hover, #btn-coba-demo:hover {
+            background-color: var(--heading-color);
+        }
+        
+        #btn-coba-demo {
+            background-color: #888;
+        }
+        
+        #btn-coba-demo:hover {
+            background-color: #666;
+        }
+
+        .atau {
+            font-weight: bold;
+            color: #aaa;
+        }
+
+        /* Halaman Countdown */
+        #halaman-countdown {
+            display: none; /* Disembunyikan di awal */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #halaman-countdown h1 {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--heading-color);
+        }
+
+        #timer {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .waktu {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            min-width: 100px;
+        }
+
+        .waktu span {
+            display: block;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .waktu p {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        /* --- Layout Halaman Ultah --- */
+        #halaman-ultah {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slider-wrapper {
+            display: flex;
+            width: 200vw; /* 2 slide, masing-masing 100vw */
+            height: 100vh;
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .pesan-pribadi {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            max-width: 700px;
+        }
+
+        .pesan-pribadi h1 {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            color: var(--heading-color);
+            margin-bottom: 20px;
+        }
+
+        .pesan-pribadi p {
+            font-family: var(--heading-font);
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .galeri-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding-bottom: 5vh; /* Menambah jarak di bawah galeri */
+        }
+        
+        .galeri-container h2 {
+            font-family: var(--heading-font);
+            font-size: 2.2rem;
+            color: var(--heading-color);
+            margin-bottom: 60px; /* Jarak antara judul dan kartu foto ditambah */
+        }
+
+        .galeri-foto {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 65vh; /* Disesuaikan sedikit */
+            position: relative;
+        }
+
+        .kartu-foto {
+            display: none; /* Sembunyikan semua kartu by default */
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            width: 90%;
+            max-width: 400px;
+            animation: popIn 0.5s ease;
+        }
+
+        .kartu-foto.active {
+            display: block; /* Tampilkan hanya kartu yang aktif */
+        }
+        
+        .kartu-foto img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            background-color: #eee;
+        }
+
+        .caption {
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Tombol Navigasi Utama & Galeri */
+        .nav-btn, .gallery-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            color: var(--heading-color);
+        }
+        .nav-btn:hover, .gallery-nav-btn:hover {
+            background-color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        #nav-kiri { left: 20px; }
+        #nav-kanan { right: 20px; }
+
+        /* Posisi tombol galeri lebih dekat ke kartu */
+        #gallery-prev { left: 25vw; }
+        #gallery-next { right: 25vw; }
+        
+        /* Responsif untuk tombol agar tidak terlalu besar di mobile */
+        @media (max-width: 768px) {
+            .nav-btn, .gallery-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            #nav-kiri { left: 10px; }
+            #nav-kanan { right: 10px; }
+            
+            #gallery-prev { left: 10px; } /* Posisi kembali ke tepi di mobile */
+            #gallery-next { right: 10px; }
+
+            .pesan-pribadi h1 { font-size: 2rem; }
+            .pesan-pribadi p { font-size: 1rem; }
+            .galeri-container h2 { font-size: 1.8rem; margin-bottom: 40px;}
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Halaman Pilihan Awal -->
+    <div id="halaman-pilihan">
+        <div class="pilihan-box">
+            <h1>Selamat Datang!</h1>
+            <p>Masukkan tanggal lahirmu untuk memulai hitung mundur, atau coba demo singkat.</p>
+            <div class="input-grup">
+                <input type="date" id="input-tanggal-lahir">
+                <button id="btn-set-tanggal">Mulai Hitung Mundur</button>
+            </div>
+            <p class="atau">atau</p>
+            <button id="btn-coba-demo">Coba Demo 8 Detik</button>
+        </div>
+    </div>
+
+    <!-- Halaman 1: Countdown -->
+    <div id="halaman-countdown">
+        <h1>Happy Birthday to Me!</h1>
+        <div id="timer">
+            <div class="waktu"><span id="hari">00</span><p>Hari</p></div>
+            <div class="waktu"><span id="jam">00</span><p>Jam</p></div>
+            <div class="waktu"><span id="menit">00</span><p>Menit</p></div>
+            <div class="waktu"><span id="detik">00</span><p>Detik</p></div>
+        </div>
+    </div>
+
+    <!-- Halaman 2: Ucapan Ulang Tahun (Slider) -->
+    <div id="halaman-ultah">
+        <button class="nav-btn" id="nav-kiri">&#10094;</button>
+        <button class="nav-btn" id="nav-kanan">&#10095;</button>
+
+        <div class="slider-wrapper">
+            <!-- Slide 1: Pesan -->
+            <div class="slide">
+                <div class="pesan-pribadi">
+                    <h1>Babak Baru, Perjalanan Baru</h1>
+                    <p>"Untuk diriku, selamat bertambah usia. Terima kasih sudah bertahan sekuat ini, sudah berjalan sejauh ini. Ada tawa yang terukir, ada luka yang mengering, dan semua itu membentukmu menjadi pribadi yang lebih bijak. Jangan pernah lupa untuk menyayangi dirimu sendiri, untuk beristirahat saat lelah, dan untuk merayakan setiap pencapaian kecil. Perjalanan ke depan mungkin tidak selalu mudah, tapi ingatlah, kamu punya dirimu sendiri. Teruslah bertumbuh, teruslah berbahagia."</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Galeri -->
+            <div class="slide">
+                <div class="galeri-container">
+                    <h2>Album Kenangan</h2>
+                    <div class="galeri-foto">
+                        <div class="kartu-foto">
+                            <img src="img/1.jpg" alt="Foto skripsi">
+                            <p class="caption">Momen penuh kelegaan dan kebanggaan. Perjuangan panjang selama kuliah akhirnya terbayar lunas di hari sidang ini.</p>
+                        </div>
+                        <div class="kartu-foto">
+                            <img src="img/2.jpg" alt="Teman seperjuangan prodi">
+                            <p class="caption">Bersama mereka, teman seperjuangan di program studi. Berbagi pusingnya tugas dan bahagianya kelulusan bersama.</p>
+                        </div>
+                        <div class="kartu-foto">
+                            <img src="img/3.jpg" alt="Bareng kakak">
+                            <p class="caption">Sosok panutan sekaligus sahabat terbaik. Selalu ada untuk memberi dukungan tanpa syarat di setiap langkah.</p>
+                        </div>
+                        <div class="kartu-foto">
+                            <img src="img/4.jpg" alt="Tim organisasi">
+                            <p class="caption">Lebih dari sekadar teman organisasi, mereka adalah keluarga kedua. Tempat berbagi ide, tawa, dan semangat juang.</p>
+                        </div>
+                        <div class="kartu-foto">
+                            <img src="img/5.jpg" alt="Selfie">
+                            <p class="caption">Sebuah pengingat untuk selalu percaya diri. Merasa nyaman dengan diri sendiri adalah salah satu kunci kebahagiaan.</p>
+                        </div>
+                        <div class="kartu-foto">
+                            <img src="img/6.jpg" alt="Candid">
+                            <p class="caption">Tertangkap dalam momen candid yang tak terduga. Tawa lepas seperti ini adalah salah satu hal paling jujur dan berharga.</p>
+                        </div>
+                    </div>
+                    <!-- Tombol Navigasi Galeri -->
+                    <button class="gallery-nav-btn" id="gallery-prev">&#10094;</button>
+                    <button class="gallery-nav-btn" id="gallery-next">&#10095;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elemen DOM
+            const halamanPilihan = document.getElementById('halaman-pilihan');
+            const halamanCountdown = document.getElementById('halaman-countdown');
+            const halamanUltah = document.getElementById('halaman-ultah');
+            
+            const inputTanggalLahir = document.getElementById('input-tanggal-lahir');
+            const btnSetTanggal = document.getElementById('btn-set-tanggal');
+            const btnCobaDemo = document.getElementById('btn-coba-demo');
+
+            const hariEl = document.getElementById('hari');
+            const jamEl = document.getElementById('jam');
+            const menitEl = document.getElementById('menit');
+            const detikEl = document.getElementById('detik');
+            
+            let suaraSudahDimainkan = false;
+            let tanggalTarget;
+            let interval;
+
+            function mainkanSuara() {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const audioCtx = new AudioContext();
+                const oscillator = audioCtx.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                oscillator.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.2);
+            }
+
+            function hitungMundur() {
+                const selisih = tanggalTarget.getTime() - new Date().getTime();
+
+                if (selisih <= 0) {
+                    clearInterval(interval);
+                    tampilkanHalamanUltah();
+                    return;
+                }
+
+                const detik = Math.floor((selisih % (1000 * 60)) / 1000);
+                if (selisih < 6000 && selisih > 5000 && !suaraSudahDimainkan) {
+                    mainkanSuara();
+                    suaraSudahDimainkan = true;
+                }
+
+                detikEl.innerText = formatWaktu(detik);
+                menitEl.innerText = formatWaktu(Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60)));
+                jamEl.innerText = formatWaktu(Math.floor((selisih % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+                hariEl.innerText = formatWaktu(Math.floor(selisih / (1000 * 60 * 60 * 24)));
+            }
+
+            function mulaiCountdown() {
+                halamanPilihan.style.display = 'none';
+                halamanCountdown.style.display = 'flex';
+                interval = setInterval(hitungMundur, 1000);
+                hitungMundur(); // Panggil sekali agar tidak delay
+            }
+
+            btnSetTanggal.addEventListener('click', function() {
+                const tanggalValue = inputTanggalLahir.value;
+                if (!tanggalValue) {
+                    // Di browser modern, alert() mungkin tidak berfungsi di iframe.
+                    // Idealnya, ganti dengan custom modal. Untuk sementara, kita log ke console.
+                    console.error("Tanggal lahir belum dipilih.");
+                    inputTanggalLahir.style.border = "1px solid red";
+                    return;
+                }
+                inputTanggalLahir.style.border = "1px solid #ddd";
+
+                const parts = tanggalValue.split('-');
+                const bulanLahir = parseInt(parts[1]) - 1; // JS month is 0-indexed
+                const hariLahir = parseInt(parts[2]);
+
+                const sekarang = new Date();
+                const tahunSekarang = sekarang.getFullYear();
+                
+                tanggalTarget = new Date(tahunSekarang, bulanLahir, hariLahir);
+
+                if (sekarang.getTime() > tanggalTarget.getTime()) {
+                    tanggalTarget.setFullYear(tahunSekarang + 1);
+                }
+
+                mulaiCountdown();
+            });
+
+            btnCobaDemo.addEventListener('click', function() {
+                tanggalTarget = new Date(new Date().getTime() + 8000);
+                mulaiCountdown();
+            });
+
+            function tampilkanHalamanUltah() {
+                halamanCountdown.style.display = 'none';
+                halamanUltah.style.display = 'block';
+                setupSlider();
+                setupGallerySlider();
+            }
+            
+            function formatWaktu(waktu) {
+                return waktu < 10 ? `0${waktu}` : waktu;
+            }
+
+            // --- LOGIKA SLIDER UTAMA ---
+            function setupSlider() {
+                const sliderWrapper = document.querySelector('.slider-wrapper');
+                const navKiri = document.getElementById('nav-kiri');
+                const navKanan = document.getElementById('nav-kanan');
+                let currentSlide = 0;
+                const totalSlides = 2;
+
+                function updateNavButtons() {
+                    navKiri.style.display = currentSlide === 0 ? 'none' : 'block';
+                    navKanan.style.display = currentSlide === totalSlides - 1 ? 'none' : 'block';
+                }
+
+                function goToSlide(slideIndex) {
+                    sliderWrapper.style.transform = `translateX(-${slideIndex * 100}vw)`;
+                    currentSlide = slideIndex;
+                    updateNavButtons();
+                }
+
+                navKanan.addEventListener('click', () => {
+                    if (currentSlide < totalSlides - 1) {
+                        goToSlide(currentSlide + 1);
+                    }
+                });
+
+                navKiri.addEventListener('click', () => {
+                    if (currentSlide > 0) {
+                        goToSlide(currentSlide - 1);
+                    }
+                });
+
+                updateNavButtons();
+            }
+
+            // --- LOGIKA GALERI (UNTUK SEMUA UKURAN LAYAR) ---
+            function setupGallerySlider() {
+                const galleryPrevBtn = document.getElementById('gallery-prev');
+                const galleryNextBtn = document.getElementById('gallery-next');
+                const photoCards = document.querySelectorAll('.galeri-foto .kartu-foto');
+                let currentImageIndex = 0;
+                const totalImages = photoCards.length;
+
+                function showImage(index) {
+                    photoCards.forEach(card => card.classList.remove('active'));
+                    photoCards[index].classList.add('active');
+
+                    galleryPrevBtn.style.display = index === 0 ? 'none' : 'block';
+                    galleryNextBtn.style.display = index === totalImages - 1 ? 'none' : 'block';
+                }
+
+                galleryNextBtn.addEventListener('click', () => {
+                    if (currentImageIndex < totalImages - 1) {
+                        currentImageIndex++;
+                        showImage(currentImageIndex);
+                    }
+                });
+
+                galleryPrevBtn.addEventListener('click', () => {
+                    if (currentImageIndex > 0) {
+                        currentImageIndex--;
+                        showImage(currentImageIndex);
+                    }
+                });
+                
+                showImage(0);
+            }
+        });
+    </script>
+</body>
+</html>
